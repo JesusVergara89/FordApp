@@ -16,7 +16,7 @@ interface carsProp {
     colors: Array<string>
     versions: Array<string>
     show_image: string
-    comparations: Array<object>
+    comparations: [{ version: string, image: string, price: string }]
 }
 
 export default function Detail() {
