@@ -1,7 +1,7 @@
 import { ActivityIndicator, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, version } from 'react'
 import { Screen } from '@/components/Screen'
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import Colors from '@/constants/Colors';
 
@@ -15,9 +15,12 @@ interface carsProp {
     image_url: Array<string>
     colors: Array<string>
     versions: Array<string>
+    show_image: string
+    comparations: Array<object>
 }
 
 export default function Detail() {
+
     const [car, setCar] = useState<carsProp | null>(null);
     const [imageurl, setImageurl] = useState<string>('')
 
@@ -29,8 +32,6 @@ export default function Detail() {
             .then(({ data }) => setCar(data))
             .catch(e => console.log(e))
     }, [id])
-
-    const headerTitle = Array.isArray(id) ? id[0] : id;
 
     const changeColorCar = (index: number) => {
         if (car?.image_url) {
@@ -62,7 +63,7 @@ export default function Detail() {
                                 <Text style={styles.engine} >{`Engine: \n\n${car.engine}`}</Text>
                                 <Text style={styles.titleDescription} >{car.model}</Text>
                                 <Text style={styles.description} >{car.description}</Text>
-                                <Text style={styles.versions} >Versions</Text>
+                                <Text style={styles.versions1} >Versions</Text>
                                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.versionContent} >
                                     {car.versions.map((version, index) => (
                                         <View key={index} style={styles.containerVersiion}>
@@ -70,6 +71,9 @@ export default function Detail() {
                                         </View>
                                     ))}
                                 </ScrollView>
+                                <Link asChild href={`/version/${car.id}`}>
+                                    <Text style={styles.versions2} >Compare versions</Text>
+                                </Link>
                             </View>
                         </ScrollView>
                     </SafeAreaView>
@@ -147,19 +151,35 @@ const styles = StyleSheet.create({
         textAlign: "left",
         paddingRight: 30,
     },
-    versions: {
+    versions1: {
         marginTop: 25,
         textAlign: "center",
         fontSize: 28,
         fontWeight: "200",
         color: Colors.blueDark,
+        marginVertical: 15,
+        padding: 20,
+    },
+    versions2: {
+        marginTop: 25,
+        textAlign: "center",
+        fontSize: 28,
+        fontWeight: "200",
+        color: Colors.blueDark,
+        marginVertical: 15,
+        padding: 20,
+        borderWidth: 1,
+        width: 370,
+        borderColor: Colors.fordClear,
+        margin: "auto",
+        marginBottom: 100,
     },
     versionContent: {
         justifyContent: "center",
         alignItems: "center",
         columnGap: 15,
         marginTop: 10,
-        marginBottom: 10,
+        //marginBottom: 100,
         margin: "auto",
         rowGap: 15,
     },

@@ -7,9 +7,7 @@ const Page = () => {
     return (
         <Screen >
             <View >
-
                 <Text>Ford</Text>
-
             </View>
         </Screen>
     );
