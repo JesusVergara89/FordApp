@@ -4,7 +4,6 @@ import { Screen } from '@/components/Screen'
 import { Stack, useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import Colors from '@/constants/Colors';
-import LinearGradient from 'react-native-linear-gradient';
 
 interface carsProp {
     id: string
@@ -59,29 +58,38 @@ export default function Detail() {
                     headerShown: false,
                 }}
             />
-            <View>
-                <Image style={styles.showImage} source={{ uri: car?.show_image }} />
-                <View style={styles.gradient} />
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.container}>
-                    {car?.comparations.map((version, index) => (
-                        <View style={styles.containerImage} key={index} >
-                            <View style={styles.version} >
-                                <Text style={styles.versionText} >{version.version}</Text>
+            {car === null ? (
+                <ActivityIndicator style={styles.loader} color={Colors.blueDark} size={"large"} />
+            ) : (
+                <View>
+                    <Image style={styles.showImage} source={{ uri: car?.show_image }} />
+                    <View style={styles.gradient} />
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.container}>
+                        {car?.comparations.map((version, index) => (
+                            <View style={styles.containerImage} key={index} >
+                                <View style={styles.version} >
+                                    <Text style={styles.versionText} >{version.version}</Text>
+                                </View>
+                                <Image style={styles.image} source={{ uri: version.image }} />
+                                <View style={styles.price} >
+                                    <Text style={styles.priceStarting} >Price starting from: <Text style={styles.priceText} >${setNewPrice(version.price)}</Text></Text>
+                                </View>
                             </View>
-                            <Image style={styles.image} source={{ uri: version.image }} />
-                            <View style={styles.price} >
-                                <Text style={styles.priceStarting} >Price starting from: <Text style={styles.priceText} >${setNewPrice(version.price)}</Text></Text>
-                            </View>
-                        </View>
-                    ))}
-                </ScrollView>
-                <Text style={styles.model} >{car?.model}</Text>
-            </View>
+                        ))}
+                    </ScrollView>
+                    <Text style={styles.model} >{car?.model}</Text>
+                </View>
+            )}
         </Screen>
     )
 }
 
 const styles = StyleSheet.create({
+    loader: {
+        position: "absolute",
+        top: "45%",
+        alignSelf: "center"
+    },
     model: {
         position: "absolute",
         bottom: -90,
